@@ -2,18 +2,16 @@
 # TODO include flask for web stuff
 # TODO twitter stuff later
 
-# Relevant :
+# Relevant:
 # ----------
 # discord.py sample code, documentation
 # Discord API documentation
-# Flask documentation
 
-# Third-party libraries:
+# Third-party libraries used here:
 # ----------
 # discord.py        Simplify interacting with Discord
 # python-dotenv     Grab environment variables from .env file
-# Flask             Build/run web app (API for cached info)
-# plus the many dependencies of the above
+# plus the dependencies of the above
 
 import asyncio
 import logging
@@ -26,9 +24,9 @@ import os
 
 # Environment variables
 load_dotenv()
-BOT_TOKEN_SUPER_SECRET = os.getenv('BOT_TOKEN')
-SERVER_ID = int(os.getenv('SERVER_ID'))
-VERIFIED_ROLE_ID = int(os.getenv('VERIFIED_ROLE_ID'))
+BOT_TOKEN_SUPER_SECRET = os.getenv('DISCORD_BOT_TOKEN')
+SERVER_ID = int(os.getenv('DISCORD_SERVER_ID'))
+VERIFIED_ROLE_ID = int(os.getenv('DISCORD_VERIFIED_ROLE_ID'))
 
 # Log to file `DCMemTracker_YEAR-MONTH-DAY_HOUR-MINUTE-SECOND.log`
 # Times are UTC

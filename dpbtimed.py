@@ -2,6 +2,13 @@ from discord.ext import tasks
 
 import discord
 
+from dotenv import load_dotenv
+import os
+
+# Environment variables
+load_dotenv()
+BOT_TOKEN_SUPER_SECRET = os.getenv('DISCORD_BOT_TOKEN')
+
 class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,4 +36,4 @@ class MyClient(discord.Client):
         await self.wait_until_ready() # wait until the bot logs in
 
 client = MyClient()
-client.run('OTg2NzQ2MTUyODIzMTkzNjgw.GIbDR0.KjJ8YFLH1AIlvAHq2DAevIt-BnlsWdFNNVkY_I')
+client.run(BOT_TOKEN_SUPER_SECRET)
