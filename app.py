@@ -1,5 +1,6 @@
 # Proxy caching web app to help award Discord/Twitter/other social media bonuses
-
+# For local testing: https://github.com/discord/discord-example-app#set-up-interactivity
+#                    (Use ngrok url as Roblox request destination)
 
 # Web app behavior
 import SocialEngagementBonusAPI as api
@@ -15,8 +16,9 @@ import asyncio
 from threading import Thread
 from time import sleep
 
-# TODO get discord bot, twitter thing going
+# TODO Twitter stuff going
 # https://discordpy.readthedocs.io/en/stable/api.html#discord.Client.start
+# https://stackoverflow.com/questions/55030714/c-python-asyncio-running-discord-py-in-a-thread
 discord_bot_loop = asyncio.get_event_loop()
 discord_bot_loop.create_task(discord_bot.client.start(discord_bot.BOT_TOKEN_SUPER_SECRET))
 
