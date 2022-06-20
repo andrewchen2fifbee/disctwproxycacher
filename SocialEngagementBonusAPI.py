@@ -1,6 +1,6 @@
 # Description:
 # ----------
-# Run the web API using Flask.
+# Flask web API behavior.
 # May want to save cached info to file if restarts become an issue?
 
 # Relevant:
@@ -40,7 +40,7 @@ class GenericError(Exception):
         if self.payload is None:
             self.payload = ()
         errDict = dict(self.payload)
-        errDict["message"] = self.message
+        errDict['message'] = self.message
         return errDict
 
 
@@ -58,9 +58,9 @@ def authenticate_key():
         raise GenericError('Unauthorized user, key invalid', status_code=401)
 
 
-def check_discord_verification():
+def check_discord_verification(bot_client):
     username = request.args.get('username', type=str)
     if username:
-        return 'WELCOME! SORRY, UNDER CONSTRUCTION... DUNNO IF ' + username + ' IS OK OR NOT :('
+        return str(bot_client.is_user_verified(username))
     else:
         raise GenericError('Please provide a username to check bonus eligibility for...', status_code=400)

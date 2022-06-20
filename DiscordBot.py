@@ -60,14 +60,16 @@ class DiscordMemberTrackingClient(discord.Client):
 
 
     async def on_ready(self):
-        logging.info('Logged in as')
-        logging.info(self.user.name)
-        logging.info(self.user.id)
-        logging.info('------')
+        ready_msg = 'DISCORD BOT: Logged in as: ' + self.user.name
+        ready_msg += '\n\tUser ID: ' + str(self.user.id)
+        ready_msg += '\n------'
         self.server = client.get_guild(SERVER_ID)
         self.verified_role = self.server.get_role(VERIFIED_ROLE_ID)
-        logging.info('Tracking in server', self.server.name, 'id', self.server.id)
-        logging.info('------')
+        ready_msg += '\nDISCORD BOT: Tracking in server ' + self.server.name
+        ready_msg += '\n\tServer ID: ' + str(self.server.id)
+        ready_msg += '\n------'
+        print(ready_msg)
+        logging.info(ready_msg)
 
 
     async def my_background_task(self):
@@ -80,11 +82,16 @@ class DiscordMemberTrackingClient(discord.Client):
             await asyncio.sleep(60) # task runs every 60 seconds
 
 
-    def is_user_verified(username):
+    def is_user_verified(self, username):
         member = None
         verified = False
 
-        if not len(username):
+        if not self.is_ready:
+            warning_msg = 'DISCORD BOT: is_user_verified called, is_ready() == false (caches not ready)'
+            print(warning_msg)
+            logging.warning(warning_msg)
+        # 2 - 32, +5 for #discriminator, +32 in case discord decides to increase max username size
+        if len(username) < 2 or len(username) > 69:
             return False
         else:
             try:
@@ -98,4 +105,3 @@ class DiscordMemberTrackingClient(discord.Client):
             return False
 
 client = DiscordMemberTrackingClient(intents=intents)
-client.run(BOT_TOKEN_SUPER_SECRET)
