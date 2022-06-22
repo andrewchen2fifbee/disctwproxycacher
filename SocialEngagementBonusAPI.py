@@ -66,9 +66,9 @@ def check_discord_verification(bot_client):
         raise GenericError('Please provide a username to check bonus eligibility for...', status_code=400)
 
 
-def check_twitter_verification():
+def check_twitter_verification(scraper):
     username = request.args.get('username', type=str)
     if username:
-        return False # TODO connect the thingy
+        return str(scraper.is_user_verified(username))
     else:
         raise GenericError('Please provide a username to check bonus eligibility for...', status_code=400)

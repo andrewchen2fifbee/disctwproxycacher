@@ -56,7 +56,6 @@ class DiscordMemberTrackingClient(discord.Client):
 
         # create the background task and run it in the background
         # all other init stuff is lazy, when our bot is ready (logged in, etc)
-        self.bg_task = self.loop.create_task(self.my_background_task())
 
 
     async def on_ready(self):
@@ -70,16 +69,6 @@ class DiscordMemberTrackingClient(discord.Client):
         ready_msg += '\n------'
         print(ready_msg)
         logging.info(ready_msg)
-
-
-    async def my_background_task(self):
-        await self.wait_until_ready()
-        counter = 0
-        # channel = self.get_channel(986747470283407433) # channel ID goes here
-        while not self.is_closed():
-            counter += 1
-            # await channel.send(counter)
-            await asyncio.sleep(60) # task runs every 60 seconds
 
 
     def is_user_verified(self, username):

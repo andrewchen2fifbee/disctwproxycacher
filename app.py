@@ -8,23 +8,25 @@ from flask import Flask
 
 # Interact w/ Discord, Twitter, cache and check results
 import DiscordBot as discord_bot
+import TwitterFollowScraper as scraper
 
-# Flask, discord.py are both blocking when run
-# This is jank but it also simplifies communication
-#       (share objects instead of database/files/...; Flask doesn't modify discord bot)
+# Flask, discord.py are both blocking when run directly
+# Run them on separate threads, can still share stuff
+#       (share objects instead of database/files/...; API doesn't modify so it's OK)
 import asyncio
 from threading import Thread
 from time import sleep
 
-# TODO Twitter stuff going
+# These go on a separate thread
 # https://discordpy.readthedocs.io/en/stable/api.html#discord.Client.start
 # https://stackoverflow.com/questions/55030714/c-python-asyncio-running-discord-py-in-a-thread
-discord_bot_loop = asyncio.get_event_loop()
-discord_bot_loop.create_task(discord_bot.client.start(discord_bot.BOT_TOKEN_SUPER_SECRET))
+event_loop = asyncio.get_event_loop()
+event_loop.create_task(discord_bot.client.start(discord_bot.BOT_TOKEN_SUPER_SECRET))
+event_loop.create_task(scraper.scrape_twitter_followers())
 
 # TODO figure out hosting, ...
 #       https://flask.palletsprojects.com/en/2.1.x/deploying/
-# TODO flask -> logging?
+# TODO Logging for Flask + Twitter stuff
 app = Flask(__name__)
 
 
@@ -47,7 +49,7 @@ def wrapper_check_discord_verification():
 
 @app.route('/player-bonus-verification/twitter')
 def wrapper_check_twitter_verification():
-    return api.check_twitter_verification()
+    return api.check_twitter_verification(scraper)
 
 
 # Run server
@@ -59,5 +61,6 @@ if __name__ == "__app__":
     app.run(host='0.0.0.0', port=80, threaded=True, debug=False)
 
 # Daemon threads die when all non-daemon threads (in this case, main thread) die
+print('TWITTER: Starting Twitter scraper...')
 print('DISCORD: Starting Discord bot...')
-Thread(target=discord_bot_loop.run_forever, daemon=True).start()
+Thread(target=event_loop.run_forever, daemon=True).start()
