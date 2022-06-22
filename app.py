@@ -45,6 +45,11 @@ def wrapper_check_discord_verification():
     return api.check_discord_verification(discord_bot.client)
 
 
+@app.route('/player-bonus-verification/twitter')
+def wrapper_check_twitter_verification():
+    return api.check_twitter_verification()
+
+
 # Run server
 # NOTE: Debug mode gives a debugger that allows code execution.
 #       Really really make sure DEBUG IS OFF for PRODUCTION SERVERS.

@@ -86,10 +86,15 @@ class DiscordMemberTrackingClient(discord.Client):
         member = None
         verified = False
 
+        if not isinstance(username, str):
+            print('DISCORD: Received non-string username for verification check')
+            return False
+
         if not self.is_ready:
             warning_msg = 'DISCORD BOT: is_user_verified called, is_ready() == false (caches not ready)'
             print(warning_msg)
             logging.warning(warning_msg)
+
         # 2 - 32, +5 for #discriminator, +32 in case discord decides to increase max username size
         if len(username) < 2 or len(username) > 69:
             return False

@@ -11,7 +11,7 @@
 # ----------
 # python-dotenv     Grab environment variables from .env file
 # Flask             Build/run web app (API for cached info)
-# plus the many dependencies of the above
+# plus the dependencies of the above
 
 from flask import request, jsonify
 
@@ -62,5 +62,13 @@ def check_discord_verification(bot_client):
     username = request.args.get('username', type=str)
     if username:
         return str(bot_client.is_user_verified(username))
+    else:
+        raise GenericError('Please provide a username to check bonus eligibility for...', status_code=400)
+
+
+def check_twitter_verification():
+    username = request.args.get('username', type=str)
+    if username:
+        return False # TODO connect the thingy
     else:
         raise GenericError('Please provide a username to check bonus eligibility for...', status_code=400)
