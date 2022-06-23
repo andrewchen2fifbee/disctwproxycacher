@@ -94,7 +94,8 @@ class DiscordMemberTrackingClient(discord.Client):
                 member = self.server.get_member_named(username)
 
         if member:
-            return member_has_role(member, self.verified_role)
+            return True
+            # return member_has_role(member, self.verified_role)
         else:
             return False
 
