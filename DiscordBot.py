@@ -12,6 +12,7 @@
 import asyncio
 import logging
 import time
+from warnings import warn
 
 import discord
 
@@ -26,13 +27,13 @@ VERIFIED_ROLE_ID = int(os.getenv('DISCORD_VERIFIED_ROLE_ID'))
 
 # Log to file `DCMemTracker_YEAR-MONTH-DAY_HOUR-MINUTE-SECOND.log`
 # Times are UTC
-start_time = time.strftime('_%Y-%m-%d_%H-%M-%S', time.gmtime())
-log_filename = 'DCMemTrackerLog' + start_time + '.log'
-logger = logging.getLogger('discord')
-logger.setLevel(logging.WARNING)
-handler = logging.FileHandler(filename=log_filename, encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+# start_time = time.strftime('_%Y-%m-%d_%H-%M-%S', time.gmtime())
+# log_filename = 'DCMemTrackerLog' + start_time + '.log'
+# logger = logging.getLogger('discord')
+# logger.setLevel(logging.WARNING)
+# handler = logging.FileHandler(filename=log_filename, encoding='utf-8', mode='w')
+# handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+# logger.addHandler(handler)
 
 # Enable members intent to use guild.members
 intents = discord.Intents.default()
@@ -68,7 +69,7 @@ class DiscordMemberTrackingClient(discord.Client):
         ready_msg += '\n\tServer ID: ' + str(self.server.id)
         ready_msg += '\n------'
         print(ready_msg)
-        logging.info(ready_msg)
+        # logging.info(ready_msg)
 
 
     def is_user_verified(self, username):
@@ -81,8 +82,8 @@ class DiscordMemberTrackingClient(discord.Client):
 
         if not self.is_ready:
             warning_msg = 'DISCORD BOT: is_user_verified called, is_ready() == false (caches not ready)'
-            print(warning_msg)
-            logging.warning(warning_msg)
+            warn(warning_msg)
+            # logging.warning(warning_msg)
 
         # 2 - 32, +5 for #discriminator, +32 in case discord decides to increase max username size
         if len(username) < 2 or len(username) > 69:

@@ -13,6 +13,7 @@ from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 import asyncio
 import time
+from warnings import warn
 
 from dotenv import load_dotenv
 import os
@@ -63,10 +64,10 @@ async def scrape_twitter_followers():
                     username = user['username']
                     recent_followers.append(username.lower())
             elif result.status_code == 429:
-                print('TWITTER: Scraper reached a rate limit, error code', r.status_code)
+                warn('TWITTER: Scraper reached a rate limit, error code', r.status_code)
             else:
                 # https://developer.twitter.com/en/support/twitter-api/error-troubleshooting
-                print('TWITTER: Encountered an error, error code', r.status_code)
+                warn('TWITTER: Encountered an error, error code', r.status_code)
 
             # Wait + repeat. Try to wait longer if we're short on requests
             try:
@@ -78,13 +79,13 @@ async def scrape_twitter_followers():
                 #         'from', rate_limit_remaining, 'more requests',
                 #         'over the next', rate_limit_reset-current_time, 'seconds')
             except:
-                print('TWITTER: Could not calculate dynamic request spacing. Continuing...')
+                warn('TWITTER: Could not calculate dynamic request spacing. Continuing...')
         except:
             # TODO more descriptive (take the exception and show info...)
-            print('TWITTER: Request failed (timeout/connection error/etc). Continuing...')
+            warn('TWITTER: Request failed (timeout/connection error/etc). Continuing...')
 
         sleep_time = max(MIN_REQUEST_SPACING, dynamic_request_spacing)
-        print('TWITTER: Sleeping for', sleep_time, 'seconds...')
+        # print('TWITTER: Sleeping for', sleep_time, 'seconds...')
         await asyncio.sleep(sleep_time)
 
 
@@ -93,5 +94,5 @@ def is_user_verified(username):
         return username.lower() in recent_followers
     except:
         # TODO could improve the error response here
-        print('TWITTER: Received non-string username for verification check')
+        warn('TWITTER: Received non-string username for verification check')
         return False
